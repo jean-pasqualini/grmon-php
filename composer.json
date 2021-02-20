@@ -1,0 +1,19 @@
+{
+    "name": "darkilliant/grmon-php",
+    "require": {
+        "symfony/console": "^5.2",
+        "symfony/var-dumper": "^5.2",
+        "symfony/http-client": "^5.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src"
+        }
+    },
+    "authors": [
+        {
+            "name": "Jean pasqualini",
+            "email": "jpasqualini75@gmail.com"
+        }
+    ]
+}
