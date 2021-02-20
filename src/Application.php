@@ -19,9 +19,15 @@ class Application
      */
     private $terminal;
 
+    /**
+     * @var string
+     */
+    private $endpoint;
+
     public function __construct()
     {
         $this->terminal = new Terminal();
+        $this->endpoint = getenv('PPROF_ENDPOINT') ?: 'localhost:1234';
     }
 
     private function getRawRoutines(): string
@@ -34,7 +40,7 @@ class Application
         */
 
         $client = HttpClient::create();
-        $response = $client->request('GET', "http://localhost:1234/debug/pprof/goroutine?debug=2");
+        $response = $client->request('GET', "http://{$this->endpoint}/debug/pprof/goroutine?debug=2");
 
         if ($response->getStatusCode() != 200) {
             throw new \Exception('unable to query pprof');
@@ -68,6 +74,10 @@ class Application
             })($rawRoutineLines[1]);
             $code = (function($fileline){
                 list($file, $line) = explode(':', $fileline);
+                if (!file_exists($file)) {
+                    return "file not found";
+                }
+
                 $lines = file($file);
 
                 return $lines[(int) $line - 1];
